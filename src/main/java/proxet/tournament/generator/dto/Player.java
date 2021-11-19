@@ -4,7 +4,6 @@ public class Player {
 
     private final String nickname;
     private final int vehicleType;
-    //
     private final int waitTime;
 
     public Player(String nickname, int waitTime, int vehicleType) {

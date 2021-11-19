@@ -9,10 +9,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class TeamGenerator {
-
+    public static Logger LOGGER = Logger.getLogger(TeamGenerator.class.getName());
     private static final int VEHICLE_TYPE_1 = 1;
     private static final int VEHICLE_TYPE_2 = 2;
     private static final int VEHICLE_TYPE_3 = 3;
@@ -25,6 +26,7 @@ public class TeamGenerator {
 
     private final Random randomGenerator = new Random();
 
+
     /**
      * @param filePath - String value with file location
      * @return an instance of TeamGeneratorResult that contains two lists of players
@@ -35,8 +37,8 @@ public class TeamGenerator {
         return generateResultFromSample(listsOfConcretePlayersVehicle);
     }
 
+
     /**
-     *
      * @param listsOfConcretePlayersVehicle - list of lists of players with concrete type of vehicle
      * @return lists of l
      */
@@ -74,9 +76,11 @@ public class TeamGenerator {
         return index;
     }
 
+
     /**
      * Method that choose required players from the sample => 3 vehicles of each of 3 possible vehicle types
      * So that we get three sample of each type of vehicle for further actions
+     *
      * @param playerList - list of all players
      * @return list of lists of concrete players vehicle
      */
@@ -87,10 +91,10 @@ public class TeamGenerator {
         return Arrays.asList(playersWithTypeVehicle1, playersWithTypeVehicle2, playersWithTypeVehicle3);
     }
 
+
     /**
-     *
      * @param vehicleType - required type vehicle
-     * @param playerList - list of all players
+     * @param playerList  - list of all players
      * @return list of players with max waiting time and required type vehicle
      */
     private List<Player> getPlayersWithConcreteVehicleType(int vehicleType, List<Player> playerList) {
@@ -101,10 +105,11 @@ public class TeamGenerator {
                 .collect(Collectors.toList());
     }
 
+
     /**
-     *
      * Getting data from file located by value of a required parameter
      * Used java.nio BufferedReader for better performance
+     *
      * @param filePath - String value with file location
      * @return - list of {@link Player} instances of all players in a file
      */
@@ -116,13 +121,16 @@ public class TeamGenerator {
                 playerList.add(createPlayer(line));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.toString());
+            System.exit(0);
         }
         return playerList;
     }
 
+
     /**
      * Split line by needed data and create an new player
+     *
      * @param line - String value from file
      * @return a new instance of class {@link Player}
      */

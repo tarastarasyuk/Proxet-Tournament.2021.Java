@@ -37,7 +37,7 @@ public class TeamGenerator {
     private List<List<Player>> generateTwoListsFromSample(List<List<Player>> listsOfConcretePlayersVehicle) {
         List<Player> firstList = new ArrayList<>(TEAM_CAPACITY - 1);
         List<Player> secondList = new ArrayList<>(TEAM_CAPACITY - 1);
-        List<List<Player>> lists = new ArrayList<>();
+        List<List<Player>> lists = new ArrayList<>(TEAM_QUANTITY);
         int k = 0;
         while (k != listsOfConcretePlayersVehicle.size()) {
             int i = 0;

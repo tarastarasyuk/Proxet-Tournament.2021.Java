@@ -25,19 +25,24 @@ public class TeamGenerator {
 
     private final Random randomGenerator = new Random();
 
+    /**
+     * @param filePath - String value with file location
+     * @return an instance of TeamGeneratorResult that contains two lists of players
+     */
     public TeamGeneratorResult generateTeams(String filePath) {
         List<Player> playerList = fullFillListWithPlayers(filePath);
         List<List<Player>> listsOfConcretePlayersVehicle = getListsOfConcretePlayersVehicle(playerList);
-        List<List<Player>> lists = generateTwoListsFromSample(listsOfConcretePlayersVehicle);
-        return new TeamGeneratorResult(
-                lists.get(0), lists.get(1)
-        );
+        return generateResultFromSample(listsOfConcretePlayersVehicle);
     }
 
-    private List<List<Player>> generateTwoListsFromSample(List<List<Player>> listsOfConcretePlayersVehicle) {
+    /**
+     *
+     * @param listsOfConcretePlayersVehicle - list of lists of players with concrete type of vehicle
+     * @return lists of l
+     */
+    private TeamGeneratorResult generateResultFromSample(List<List<Player>> listsOfConcretePlayersVehicle) {
         List<Player> firstList = new ArrayList<>(TEAM_CAPACITY - 1);
         List<Player> secondList = new ArrayList<>(TEAM_CAPACITY - 1);
-        List<List<Player>> lists = new ArrayList<>(TEAM_QUANTITY);
         int k = 0;
         while (k != listsOfConcretePlayersVehicle.size()) {
             int i = 0;
@@ -53,22 +58,27 @@ public class TeamGenerator {
             }
             k++;
         }
-        lists.add(firstList);
-        lists.add(secondList);
-        return lists;
+        return new TeamGeneratorResult(firstList, secondList);
     }
 
+
+    /**
+     * @param alreadyGotIndexes - already taken indexes
+     * @return a new random index
+     */
     private int getRandomIndex(Set<Integer> alreadyGotIndexes) {
         int index = randomGenerator.nextInt(TOTAL_AMOUNT_OF_ONE_TYPE_VEHICLE);
-        while (alreadyGotIndexes.size() != 6 && alreadyGotIndexes.contains(index)) {
+        while (alreadyGotIndexes.size() != TOTAL_AMOUNT_OF_ONE_TYPE_VEHICLE && alreadyGotIndexes.contains(index)) {
             index = randomGenerator.nextInt(TOTAL_AMOUNT_OF_ONE_TYPE_VEHICLE);
         }
         return index;
     }
 
-
     /**
-     * TODO: MAIN CONDITION: THERE SHOULD BE SIX PLAYERS WITH 1, WITH 2, WITH 3 TYPE OF VEHICLES TO FOLLOW THE GIVEN CONDITION
+     * Method that choose required players from the sample => 3 vehicles of each of 3 possible vehicle types
+     * So that we get three sample of each type of vehicle for further actions
+     * @param playerList - list of all players
+     * @return list of lists of concrete players vehicle
      */
     private List<List<Player>> getListsOfConcretePlayersVehicle(List<Player> playerList) {
         List<Player> playersWithTypeVehicle1 = getPlayersWithConcreteVehicleType(VEHICLE_TYPE_1, playerList);
@@ -77,6 +87,12 @@ public class TeamGenerator {
         return Arrays.asList(playersWithTypeVehicle1, playersWithTypeVehicle2, playersWithTypeVehicle3);
     }
 
+    /**
+     *
+     * @param vehicleType - required type vehicle
+     * @param playerList - list of all players
+     * @return list of players with max waiting time and required type vehicle
+     */
     private List<Player> getPlayersWithConcreteVehicleType(int vehicleType, List<Player> playerList) {
         return playerList.stream()
                 .filter(player -> player.getVehicleType() == vehicleType)
@@ -86,11 +102,11 @@ public class TeamGenerator {
     }
 
     /**
-     * \
-     * Used java.nio for better performance
      *
-     * @param filePath
-     * @return
+     * Getting data from file located by value of a required parameter
+     * Used java.nio BufferedReader for better performance
+     * @param filePath - String value with file location
+     * @return - list of {@link Player} instances of all players in a file
      */
     private List<Player> fullFillListWithPlayers(String filePath) {
         List<Player> playerList = new ArrayList<>();
@@ -105,6 +121,11 @@ public class TeamGenerator {
         return playerList;
     }
 
+    /**
+     * Split line by needed data and create an new player
+     * @param line - String value from file
+     * @return a new instance of class {@link Player}
+     */
     private Player createPlayer(String line) {
         String[] playerData = line.split(FILE_DATA_DELIMITER);
         String name = playerData[0].trim();
